@@ -1,12 +1,28 @@
-# Interface Homem-Máquina com Display OLED - RP2040 (BitDogLab)
+# Ohmimetro
 
-# Descrição
+## Descrição
+Este projeto tem como objetivo trabalhar os conceitos de ohmimetro na placa BitDogLab.
 
-Este projeto foi desenvolvido a placa BitDogLab. Tem como objetivo criar uma interface homem-máquina (IHM) utilizando um display OLED modelo "SSD1306" (resolução 128x64 pixels).
+## Como Executar
+1. Clone o repositório:
+   ```bash
+   git clone https://github.com/Daniel-Alencar/BDL-ohmimetro
+   ```
+2. Navegue até o diretório do projeto:
+   ```bash
+   cd BDL-ohmimetro
+   ```
+3. Abra o projeto no VS Code.
+  
+4. Compile e execute o projeto usando a placa BitDogLab.
 
-A aplicação exibe informações em tempo real dos potenciômetros do joystick, como a leitura dos eixos X e Y. Também exibe o estado dos botões físicos e do botão do joystick. As informações são mostradas de forma organizada no display OLED via interface I2C, objetivando
-o estudo/aprendizado das funções da biblioteca do display.
+## Vídeo de Demonstração
+```bash
 
-Observação.
-- Implementação do modo BOOTSEL por botão externo (Botão B - GPIO 6). Isto facilita a gravação no desenvolvimento do programa. Quando o projeto for finalizado, deve-se retirar
-esta função.
+```
+
+Além disso, este é o [relatório do projeto]() com mais detalhes da implementação.
+
+## Licença
+Este projeto é licenciado sob a licença MIT – consulte o arquivo LICENSE para mais detalhes.
+
