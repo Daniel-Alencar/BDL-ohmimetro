@@ -27,7 +27,7 @@ project(ohmimetro C CXX ASM)
 pico_sdk_init()
 
 add_executable(${PROJECT_NAME}  
-    Ohmimetro01.c  # Código principal 
+    Ohmimetro.c    # Código principal 
     lib/ssd1306.c  # Biblioteca para o display OLED
 )
 
