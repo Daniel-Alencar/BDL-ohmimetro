@@ -1,7 +1,7 @@
 # Ohmimetro
 
 ## Descrição
-Este projeto tem como objetivo trabalhar os conceitos de ohmimetro na placa BitDogLab.
+Este projeto tem como objetivo trabalhar os conceitos de ohmimetro na placa BitDogLab. Ou seja, o objetivo é usar a BitDogLab para ler valores de resistência variados.
 
 ## Como Executar
 1. Clone o repositório:

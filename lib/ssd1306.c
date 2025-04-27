@@ -1,7 +1,11 @@
 #include "ssd1306.h"
 #include "font.h"
 
-void ssd1306_init(ssd1306_t *ssd, uint8_t width, uint8_t height, bool external_vcc, uint8_t address, i2c_inst_t *i2c) {
+void ssd1306_init(
+  ssd1306_t *ssd, 
+  uint8_t width, uint8_t height, 
+  bool external_vcc, uint8_t address, i2c_inst_t *i2c
+) {
   ssd->width = width;
   ssd->height = height;
   ssd->pages = height / 8U;
@@ -85,17 +89,19 @@ void ssd1306_fill(ssd1306_t *ssd, bool value) {
 }*/
 
 void ssd1306_fill(ssd1306_t *ssd, bool value) {
-    // Itera por todas as posições do display
-    for (uint8_t y = 0; y < ssd->height; ++y) {
-        for (uint8_t x = 0; x < ssd->width; ++x) {
-            ssd1306_pixel(ssd, x, y, value);
-        }
+  // Itera por todas as posições do display
+  for (uint8_t y = 0; y < ssd->height; ++y) {
+    for (uint8_t x = 0; x < ssd->width; ++x) {
+      ssd1306_pixel(ssd, x, y, value);
     }
+  }
 }
 
-
-
-void ssd1306_rect(ssd1306_t *ssd, uint8_t top, uint8_t left, uint8_t width, uint8_t height, bool value, bool fill) {
+void ssd1306_rect(
+  ssd1306_t *ssd, 
+  uint8_t top, uint8_t left, uint8_t width, uint8_t height, 
+  bool value, bool fill
+) {
   for (uint8_t x = left; x < left + width; ++x) {
     ssd1306_pixel(ssd, x, top, value);
     ssd1306_pixel(ssd, x, top + height - 1, value);
@@ -114,7 +120,9 @@ void ssd1306_rect(ssd1306_t *ssd, uint8_t top, uint8_t left, uint8_t width, uint
   }
 }
 
-void ssd1306_line(ssd1306_t *ssd, uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1, bool value) {
+void ssd1306_line(
+  ssd1306_t *ssd, uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1, bool value
+) {
     int dx = abs(x1 - x0);
     int dy = abs(y1 - y0);
 
@@ -123,10 +131,12 @@ void ssd1306_line(ssd1306_t *ssd, uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1
 
     int err = dx - dy;
 
-    while (true) {
-        ssd1306_pixel(ssd, x0, y0, value); // Desenha o pixel atual
+    while (true) {  
+        // Desenha o pixel atual
+        ssd1306_pixel(ssd, x0, y0, value);
 
-        if (x0 == x1 && y0 == y1) break; // Termina quando alcança o ponto final
+        // Termina quando alcança o ponto final
+        if (x0 == x1 && y0 == y1) break; 
 
         int e2 = err * 2;
 
@@ -159,23 +169,28 @@ void ssd1306_draw_char(ssd1306_t *ssd, char c, uint8_t x, uint8_t y)
   uint16_t index = 0;
 
   // Verifica o caractere e calcula o índice correspondente na fonte
-  if (c >= ' ' && c <= '~') // Verifica se o caractere está na faixa ASCII válida
+  // Verifica se o caractere está na faixa ASCII válida
+  if (c >= ' ' && c <= '~') 
   {
-    index = (c - ' ') * 8; // Calcula o índice baseado na posição do caractere na tabela ASCII
+    // Calcula o índice baseado na posição do caractere na tabela ASCII
+    index = (c - ' ') * 8; 
   }
   else
   {
     // Caractere inválido, desenha um espaço (ou pode ser tratado de outra forma)
-    index = 0; // Índice 0 corresponde ao caractere "nada" (espaço)
+    // Índice 0 corresponde ao caractere "nada" (espaço)
+    index = 0; 
   }
 
   // Desenha o caractere na tela
   for (uint8_t i = 0; i < 8; ++i)
   {
-    uint8_t line = font[index + i]; // Acessa a linha correspondente do caractere na fonte
+    // Acessa a linha correspondente do caractere na fonte
+    uint8_t line = font[index + i]; 
     for (uint8_t j = 0; j < 8; ++j)
     {
-      ssd1306_pixel(ssd, x + i, y + j, line & (1 << j)); // Desenha cada pixel do caractere
+      // Desenha cada pixel do caractere
+      ssd1306_pixel(ssd, x + i, y + j, line & (1 << j)); 
     }
   }
 }

@@ -11,34 +11,28 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <float.h>
+#include <math.h>
 #include "pico/stdlib.h"
 #include "hardware/adc.h"
 #include "hardware/i2c.h"
 #include "lib/ssd1306.h"
 #include "lib/font.h"
-#include <float.h>
+#include "pico/bootrom.h"
 
 #define I2C_PORT i2c1
 #define I2C_SDA 14
 #define I2C_SCL 15
 #define endereco 0x3C
-#define ADC_PIN 28 // GPIO para o voltímetro
-#define Botao_A 5  // GPIO para botão A
+#define ADC_PIN 28
+#define Botao_A 5
+#define Botao_B 6
 
 int R_conhecido = 10000;   // Resistor de 10k ohm
 double R_x = 0.0;          // Resistor desconhecido
 double T_x = 0.0;          // Resistor desconhecido
 float ADC_VREF = 3.3;      // Tensão de referência do ADC
 int ADC_RESOLUTION = 4095; // Resolução do ADC (12 bits)
-
-// Trecho para modo BOOTSEL com botão B
-#include "pico/bootrom.h"
-#define Botao_B 6
-void gpio_irq_handler(uint gpio, uint32_t events) {
-  reset_usb_boot(0, 0);
-}
-
-#include <math.h>
 
 const char* resistor_colors[] = {
   "Preto", "Marrom", "Vermelho", "Laranja",
@@ -53,20 +47,24 @@ const double E24[] = {
 };
 const int E24_SIZE = 24;
 
+void gpio_irq_handler(uint gpio, uint32_t events) {
+  reset_usb_boot(0, 0);
+}
+
 double find_closest_e24_down(double resistance) {
   double closest = 0;
   double max_candidate = 0;
 
-  // Testar cada valor da série E24 multiplicado por décadas
+  // Testa cada valor da série E24
   for (int decade = -1; decade <= 6; decade++) {
-      double factor = pow(10, decade);
-      for (int i = 0; i < E24_SIZE; i++) {
-          double candidate = E24[i] * factor;
+    double factor = pow(10, decade);
+    for (int i = 0; i < E24_SIZE; i++) {
+      double candidate = E24[i] * factor;
 
-          if (candidate <= resistance && candidate > max_candidate) {
-              max_candidate = candidate;
-          }
+      if (candidate <= resistance && candidate > max_candidate) {
+        max_candidate = candidate;
       }
+    }
   }
 
   return max_candidate;
@@ -153,7 +151,7 @@ int main()
     sprintf(str_x, "%1.0f", media);
     sprintf(str_y, "%d", real_resistence);
 
-    // Atualiza o conteúdo do display com animações
+    // Atualiza o conteúdo do display com valor de resistência
     ssd1306_fill(&ssd, !cor);                           // Limpa o display
     ssd1306_rect(&ssd, 3, 3, 122, 60, cor, !cor);       // Desenha um retângulo
     ssd1306_line(&ssd, 3, 25, 123, 25, cor);            // Desenha uma linha
@@ -170,7 +168,7 @@ int main()
 
     sleep_ms(700);
 
-    // Atualiza o conteúdo do display com animações
+    // Atualiza o conteúdo do display com cores do resistor lido
     ssd1306_fill(&ssd, !cor);
     ssd1306_draw_string(&ssd, "Resistor:", 8, 6);
     ssd1306_draw_string(&ssd, resistor_colors[first_color_index], 8, 16);
